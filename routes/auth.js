@@ -12,11 +12,13 @@ router.post("/register",async (req,res)=>{
         let { name, surname, email, password} = req.body
         if(!(name && surname && email && password)){
             res.json({ status:"error", message:"Input fields is required" })
+            return
         }
 
         let user=await User.findOne({ "email":email })
         if(user){
             res.json({ status:"error", message:"Email already exists" })
+            return
         }
 
         let hashedPassword=await argon2.hash(password)
