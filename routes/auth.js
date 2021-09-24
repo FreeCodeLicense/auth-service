@@ -46,17 +46,28 @@ router.post("/register",async (req,res)=>{
 
 })
 
+
+
 router.post("/login",async (req,res)=>{
     try{
         let { email, password } = req.body
+        
         if(!(email && password)){
             res.json({ status:"error", message:"Input fields is required" })
+            return
         }
         let userRecord=await User.findOne({ "email": email })
+        
+        if(!userRecord){
+            res.json({ status:"error", message:"User not found!" })
+            return
+        }
+
         let correctPassword=await argon2.verify(userRecord.password,password)
         
         if(!correctPassword){
             res.json({ status:"error", message:"Password is incorrect" })
+            return
         }
 
         res.json({
@@ -72,6 +83,10 @@ router.post("/login",async (req,res)=>{
         console.log(err)
     }
    
+})
+
+router.get("/restore",auth, (req,res)=>{
+    res.json({ status: "ok", user: req.user })
 })
 
 router.post("/verifyemail",auth,async (req,res)=>{
@@ -105,7 +120,7 @@ router.post("/verifyemail",auth,async (req,res)=>{
             console.log("Message sent")
         })
 
-        res.json({ error: "ok", message:"Email sent" })
+        res.json({ status: "ok", message:"Email sent" })
 
     } catch(err){
         console.log(err)

@@ -1,4 +1,4 @@
-const { User } = require("../../models/index")
+const { User } = require("../../models")
 
 const isEmailConfirmed=async (req,res,next)=>{
 

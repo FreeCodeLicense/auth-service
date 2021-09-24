@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const auth=require("./middlewares/isAuth")
 const verifyemail=require("./middlewares/emailConfirmed")
-const { User }=require("../models/index")
+const { User }=require("../models")
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
